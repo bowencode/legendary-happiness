@@ -1,0 +1,22 @@
+﻿@page
+
+@using Microsoft.AspNetCore.Authentication
+
+@model Demo.Notes.Web.Host.Pages.NotesListModel
+@{
+    ViewData["Title"] = "List of Notes";
+}
+<UserDetails />
+
+<h2>List of Notes</h2>
+
+@foreach (var note in Model.AllNotes)
+{
+    <div>
+        <a asp-page="/NoteDetail" asp-route-id="@note.Id">@note.Text.Substring(0, Math.Min(note.Text.Length, 20)) - @note.Updated.ToString("g")</a>
+    </div>
+}
+
+<hr/>
+
+<a asp-page="/AddNote">Add New Note</a>
