@@ -1,4 +1,4 @@
-using Demo.Notes.Common.Model;
+using Demo.Tokens.Common.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

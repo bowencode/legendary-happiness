@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32922.545
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.Notes.Web.Host", "Demo.Notes.Web.Host\Demo.Notes.Web.Host.csproj", "{13392146-D118-4BEB-80E4-C2EC43995082}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.Tokens.Web.Host", "Demo.Tokens.Web.Host\Demo.Tokens.Web.Host.csproj", "{13392146-D118-4BEB-80E4-C2EC43995082}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.Notes.Web.Blazor.Server", "Demo.Notes.Web.Blazor\Server\Demo.Notes.Web.Blazor.Server.csproj", "{36E02640-ED89-49AB-B503-38490475A494}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.Tokens.Web.Blazor.Server", "Demo.Tokens.Web.Blazor\Server\Demo.Tokens.Web.Blazor.Server.csproj", "{36E02640-ED89-49AB-B503-38490475A494}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.Notes.Web.Blazor.Client", "Demo.Notes.Web.Blazor\Client\Demo.Notes.Web.Blazor.Client.csproj", "{F1C10193-6DCB-46DD-8441-9DBFE4DE32AF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.Tokens.Web.Blazor.Client", "Demo.Tokens.Web.Blazor\Client\Demo.Tokens.Web.Blazor.Client.csproj", "{F1C10193-6DCB-46DD-8441-9DBFE4DE32AF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.Notes.Web.Blazor.Shared", "Demo.Notes.Web.Blazor\Shared\Demo.Notes.Web.Blazor.Shared.csproj", "{02D4B742-F7C8-4B5E-A228-559DC17DA810}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.Tokens.Web.Blazor.Shared", "Demo.Tokens.Web.Blazor\Shared\Demo.Tokens.Web.Blazor.Shared.csproj", "{02D4B742-F7C8-4B5E-A228-559DC17DA810}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Blazor", "Blazor", "{EEADE87A-901B-4B27-87DE-0A583733575E}"
 EndProject
@@ -17,11 +17,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{26EA7770-BD3
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "API", "API", "{F780D880-4378-4D46-BBF7-1156C6CDE101}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.Notes.Common", "..\..\Common\Demo.Notes.Common\Demo.Notes.Common.csproj", "{1D77028F-C2C1-4BED-9BD9-736C1CA88A47}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.Tokens.Common", "..\Common\Demo.Tokens.Common\Demo.Tokens.Common.csproj", "{1D77028F-C2C1-4BED-9BD9-736C1CA88A47}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.Notes.Web.UserApi.Host", "Demo.Notes.Web.UserApi.Host\Demo.Notes.Web.UserApi.Host.csproj", "{D7AF8FE8-17BE-4A4A-A191-795A1291FD30}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.Tokens.Web.UserApi.Host", "Demo.Tokens.Web.UserApi.Host\Demo.Tokens.Web.UserApi.Host.csproj", "{D7AF8FE8-17BE-4A4A-A191-795A1291FD30}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.Notes.Web.AdminApi.Host", "Demo.Notes.Web.AdminApi.Host\Demo.Notes.Web.AdminApi.Host.csproj", "{516EBB77-85D9-4E6C-A376-639EE57C0DE1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.Tokens.Web.AdminApi.Host", "Demo.Tokens.Web.AdminApi.Host\Demo.Tokens.Web.AdminApi.Host.csproj", "{516EBB77-85D9-4E6C-A376-639EE57C0DE1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.Partner.ExternalApi.Host", "Demo.Partner.ExternalApi.Host\Demo.Partner.ExternalApi.Host.csproj", "{EA32E1C2-0639-41D0-9591-EC6CD20ED422}"
 EndProject

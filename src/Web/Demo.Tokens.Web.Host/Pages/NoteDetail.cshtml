@@ -1,0 +1,17 @@
+﻿@page "{id}"
+@model Demo.Tokens.Web.Host.Pages.NoteDetailModel
+@{
+}
+
+<div>
+    <textarea>@Model.Note?.Text</textarea>
+</div>
+<div>
+    Saved: @Model.Note?.Updated
+</div>
+<div>
+    By: @Model.Note?.Username
+</div>
+<div>
+    ID: @Model.Note?.Id
+</div>
