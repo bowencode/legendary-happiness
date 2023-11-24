@@ -2,7 +2,7 @@ using Demo.Tokens.Common.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Demo.Partner.ExternalApi.Host.Controllers
+namespace Demo.Tokens.Api.Host.Controllers
 {
     [ApiController]
     [Route("[controller]")]

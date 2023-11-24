@@ -1,7 +1,7 @@
 using Demo.Tokens.Common.Configuration;
 using Microsoft.Azure.Cosmos;
 
-namespace Demo.Tokens.Web.UserApi.Host.Controllers
+namespace Demo.Tokens.Api.Host.Controllers
 {
     public class NotesDatabase
     {

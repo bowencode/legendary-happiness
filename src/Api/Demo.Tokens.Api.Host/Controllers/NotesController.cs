@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Options;
 
-namespace Demo.Tokens.Web.UserApi.Host.Controllers
+namespace Demo.Tokens.Api.Host.Controllers
 {
     [ApiController]
     [Authorize("ListNotes")]

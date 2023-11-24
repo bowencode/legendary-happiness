@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
 
-namespace Demo.Tokens.Web.UserApi.Host
+namespace Demo.Tokens.Api.Host
 {
     public class Program
     {
@@ -17,6 +17,7 @@ namespace Demo.Tokens.Web.UserApi.Host
             // Add services to the container.
             AddAuthenticatedApiAccess(builder.Services, builder.Configuration);
 
+            var auth0Options = builder.Configuration.GetSection("Auth0");
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, opt =>
                 {
@@ -30,6 +31,13 @@ namespace Demo.Tokens.Web.UserApi.Host
                         ValidateIssuer = true,
                         RequireAudience = true,
                     };
+                })
+                .AddJwtBearer("Auth0Bearer", options =>
+                {
+                    var authority = auth0Options.GetValue<string>("Authority");
+                    var audience = auth0Options.GetValue<string>("Audience");
+                    options.Authority = authority;
+                    options.Audience = audience;
                 });
 
             builder.Services.AddSingleton<IAuthorizationHandler, ScopeAuthorizationHandler>();
@@ -46,6 +54,39 @@ namespace Demo.Tokens.Web.UserApi.Host
                 options.AddPolicy("ListNotes", policy =>
                 {
                     policy.AddRequirements(new ScopeRequirement("list:notes"));
+                });
+
+                var scope = auth0Options.GetValue<string>("RequiredScope");
+                options.AddPolicy("ReadCalendar", policy =>
+                {
+                    policy.AddAuthenticationSchemes("Auth0Bearer");
+                    policy.RequireAssertion(ctx =>
+                    {
+                        return ctx.User.HasClaim(c => c.Type == "scope" && c.Value.Split(' ').Contains(scope));
+                    });
+                });
+
+                options.AddPolicy("ReadUsernames", policy =>
+                {
+                    policy.AddRequirements(new ScopeRequirement("read:username"));
+                });
+                options.AddPolicy("ReadUsers", policy =>
+                {
+                    policy.RequireAssertion(context =>
+                    {
+                        if (context.User.HasClaim("idp", "aad"))
+                            return true;
+
+                        if (context.User.HasClaim(c => c.Type == "scope" && c.Value.Split(' ').Contains("read:users")))
+                            return true;
+
+                        return false;
+                    });
+                });
+                options.AddPolicy("ReadUserDetails", policy =>
+                {
+                    policy.RequireClaim("idp", "aad");
+                    policy.AddRequirements(new ScopeRequirement("read:user-details"));
                 });
             });
 
