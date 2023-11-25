@@ -2,6 +2,8 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http.Headers;
 using Demo.Tokens.Common.Configuration;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.Extensions.Options;
 
 namespace Demo.Tokens.Web.Host;
 
@@ -55,29 +57,34 @@ public class Program
         app.Run();
     }
 
+    private static AuthClientType AuthenticationMode = AuthClientType.AuthCode;
+
     private static void ConfigureAuthentication(WebApplicationBuilder builder)
     {
         JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
 
         builder.Services.AddAuthentication(options =>
-            {
-                options.DefaultScheme = "Cookies";
-                options.DefaultChallengeScheme = "oidc";
-            })
+        {
+            options.DefaultScheme = "Cookies";
+            options.DefaultChallengeScheme = "oidc";
+        })
             .AddCookie("Cookies")
             .AddOpenIdConnect("oidc", options =>
             {
                 options.Authority = "https://localhost:5001";
 
-                options.ClientId = "web-ui";
-                options.ClientSecret = "1f668bf6-5ef5-4e77-ae84-28614dfc9d2d";
-                options.ResponseType = "code";
-
-                options.Scope.Add("profile");
-                options.Scope.Add("email");
-                options.Scope.Add("read:notes");
-                options.Scope.Add("write:notes");
-                options.GetClaimsFromUserInfoEndpoint = true;
+                switch (AuthenticationMode)
+                {
+                    case AuthClientType.AuthCode:
+                        ConfigureAuthCode(options);
+                        break;
+                    case AuthClientType.Implicit:
+                        ConfigureImplicit(options);
+                        break;
+                    case AuthClientType.ReferenceToken:
+                        ConfigureCodeReference(options);
+                        break;
+                }
 
                 options.SaveTokens = true;
             });
@@ -94,4 +101,49 @@ public class Program
             });
         });
     }
+
+    private static void ConfigureAuthCode(OpenIdConnectOptions options)
+    {
+        options.ClientId = "web-ui";
+        options.ClientSecret = "1f668bf6-5ef5-4e77-ae84-28614dfc9d2d";
+        options.ResponseType = "code";
+
+        options.Scope.Add("profile");
+        options.Scope.Add("email");
+        options.Scope.Add("read:notes");
+        options.Scope.Add("write:notes");
+        options.Scope.Add("offline_access");
+        options.GetClaimsFromUserInfoEndpoint = true;
+    }
+
+    private static void ConfigureImplicit(OpenIdConnectOptions options)
+    {
+        options.ClientId = "web-implicit-ui";
+        options.ResponseType = "token";
+
+        options.Scope.Add("profile");
+        options.Scope.Add("email");
+        options.Scope.Add("read:notes");
+        options.Scope.Add("write:notes");
+        options.GetClaimsFromUserInfoEndpoint = true;
+    }
+
+    private static void ConfigureCodeReference(OpenIdConnectOptions options)
+    {
+        options.ClientId = "web-ref-ui";
+        options.ResponseType = "code";
+
+        options.Scope.Add("profile");
+        options.Scope.Add("email");
+        options.Scope.Add("read:notes");
+        options.Scope.Add("write:notes");
+        options.GetClaimsFromUserInfoEndpoint = true;
+    }
+}
+
+public enum AuthClientType
+{
+    AuthCode,
+    Implicit,
+    ReferenceToken,
 }

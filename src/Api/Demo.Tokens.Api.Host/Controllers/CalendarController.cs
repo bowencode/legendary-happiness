@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace Demo.Tokens.Api.Host.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
     [Authorize("ReadCalendar")]
     public class CalendarController : ControllerBase
     {
@@ -21,7 +20,7 @@ namespace Demo.Tokens.Api.Host.Controllers
             _logger = logger;
         }
 
-        [HttpGet(Name = "GetCalendarItems")]
+        [HttpGet("api/calendar")]
         public IEnumerable<CalendarEvent> Get()
         {
             for (int i = 0; i < 10; i++)

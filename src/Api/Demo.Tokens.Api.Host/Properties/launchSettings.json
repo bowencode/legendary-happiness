@@ -9,7 +9,7 @@
     }
   },
   "profiles": {
-    "Demo.Notes.Web.UserApi.Host": {
+    "Api.Host": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,

@@ -5,14 +5,6 @@ VisualStudioVersion = 17.3.32922.545
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.Tokens.Web.Host", "Demo.Tokens.Web.Host\Demo.Tokens.Web.Host.csproj", "{13392146-D118-4BEB-80E4-C2EC43995082}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.Tokens.Web.Blazor.Server", "Demo.Tokens.Web.Blazor\Server\Demo.Tokens.Web.Blazor.Server.csproj", "{36E02640-ED89-49AB-B503-38490475A494}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.Tokens.Web.Blazor.Client", "Demo.Tokens.Web.Blazor\Client\Demo.Tokens.Web.Blazor.Client.csproj", "{F1C10193-6DCB-46DD-8441-9DBFE4DE32AF}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.Tokens.Web.Blazor.Shared", "Demo.Tokens.Web.Blazor\Shared\Demo.Tokens.Web.Blazor.Shared.csproj", "{02D4B742-F7C8-4B5E-A228-559DC17DA810}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Blazor", "Blazor", "{EEADE87A-901B-4B27-87DE-0A583733575E}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{26EA7770-BD36-42FD-8165-1A389E7CCB04}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.Tokens.Common", "..\Common\Demo.Tokens.Common\Demo.Tokens.Common.csproj", "{1D77028F-C2C1-4BED-9BD9-736C1CA88A47}"
@@ -27,18 +19,6 @@ Global
 		{13392146-D118-4BEB-80E4-C2EC43995082}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{13392146-D118-4BEB-80E4-C2EC43995082}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{13392146-D118-4BEB-80E4-C2EC43995082}.Release|Any CPU.Build.0 = Release|Any CPU
-		{36E02640-ED89-49AB-B503-38490475A494}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{36E02640-ED89-49AB-B503-38490475A494}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{36E02640-ED89-49AB-B503-38490475A494}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{36E02640-ED89-49AB-B503-38490475A494}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F1C10193-6DCB-46DD-8441-9DBFE4DE32AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F1C10193-6DCB-46DD-8441-9DBFE4DE32AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F1C10193-6DCB-46DD-8441-9DBFE4DE32AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F1C10193-6DCB-46DD-8441-9DBFE4DE32AF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{02D4B742-F7C8-4B5E-A228-559DC17DA810}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{02D4B742-F7C8-4B5E-A228-559DC17DA810}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{02D4B742-F7C8-4B5E-A228-559DC17DA810}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{02D4B742-F7C8-4B5E-A228-559DC17DA810}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1D77028F-C2C1-4BED-9BD9-736C1CA88A47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1D77028F-C2C1-4BED-9BD9-736C1CA88A47}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1D77028F-C2C1-4BED-9BD9-736C1CA88A47}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -49,9 +29,6 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{13392146-D118-4BEB-80E4-C2EC43995082} = {26EA7770-BD36-42FD-8165-1A389E7CCB04}
-		{36E02640-ED89-49AB-B503-38490475A494} = {EEADE87A-901B-4B27-87DE-0A583733575E}
-		{F1C10193-6DCB-46DD-8441-9DBFE4DE32AF} = {EEADE87A-901B-4B27-87DE-0A583733575E}
-		{02D4B742-F7C8-4B5E-A228-559DC17DA810} = {EEADE87A-901B-4B27-87DE-0A583733575E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6DC3E359-1654-431F-9936-734AD0700537}
