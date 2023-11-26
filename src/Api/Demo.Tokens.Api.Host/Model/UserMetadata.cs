@@ -1,4 +1,4 @@
-namespace Demo.Tokens.Web.AdminApi.Host.Model
+namespace Demo.Tokens.Api.Host.Model
 {
     public class UserMetadata
     {

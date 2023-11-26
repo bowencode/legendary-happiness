@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="..\..\..\data\TestUsers.json" Link="TestUsers.json">
+    <Content Include="..\..\Common\data\TestUsers.json" Link="TestUsers.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

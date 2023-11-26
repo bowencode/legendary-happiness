@@ -41,18 +41,31 @@ namespace Demo.Tokens.Api.Host
                 });
 
             builder.Services.AddSingleton<IAuthorizationHandler, ScopeAuthorizationHandler>();
+            builder.Services.AddSingleton<IAuthorizationHandler, UserAuthorizationHandler>();
             builder.Services.AddAuthorization(options =>
             {
-                options.AddPolicy("ReadNotes", policy =>
+                options.AddPolicy("ReceivedMessages", policy =>
                 {
-                    policy.AddRequirements(new ScopeRequirement("read:notes"));
+                    policy.RequireAuthenticatedUser();
+                    policy.AddRequirements(new ScopeRequirement("api1"));
                 });
-                options.AddPolicy("WriteNotes", policy =>
+                options.AddPolicy("SentMessages", policy =>
                 {
-                    policy.AddRequirements(new ScopeRequirement("write:notes"));
+                    //policy.RequireAuthenticatedUser();
+                    //policy.AddRequirements(new ScopeRequirement("api1"));
+                    policy.Requirements.Add(new UserRequirement("userId"));
                 });
-                options.AddPolicy("ListNotes", policy =>
+                options.AddPolicy("AllMessages", policy =>
                 {
+                    policy.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme);
+                    policy.RequireAssertion(ctx =>
+                    {
+                        if (ctx.User.HasClaim(c => c is { Type: "idp", Value: "aad" }))
+                        {
+                            return true;
+                        }
+                        return ctx.User.HasClaim(c => c.Type == "scope" && c.Value.Split(' ').Contains("api2"));
+                    });
                     policy.AddRequirements(new ScopeRequirement("list:notes"));
                 });
 
@@ -66,27 +79,11 @@ namespace Demo.Tokens.Api.Host
                     });
                 });
 
-                options.AddPolicy("ReadUsernames", policy =>
-                {
-                    policy.AddRequirements(new ScopeRequirement("read:username"));
-                });
-                options.AddPolicy("ReadUsers", policy =>
-                {
-                    policy.RequireAssertion(context =>
-                    {
-                        if (context.User.HasClaim("idp", "aad"))
-                            return true;
-
-                        if (context.User.HasClaim(c => c.Type == "scope" && c.Value.Split(' ').Contains("read:users")))
-                            return true;
-
-                        return false;
-                    });
-                });
                 options.AddPolicy("ReadUserDetails", policy =>
                 {
+                    policy.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme);
                     policy.RequireClaim("idp", "aad");
-                    policy.AddRequirements(new ScopeRequirement("read:user-details"));
+                    policy.AddRequirements(new ScopeRequirement("users"));
                 });
             });
 

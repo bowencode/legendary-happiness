@@ -1,13 +1,12 @@
+using Demo.Tokens.Api.Host.Model;
 using Demo.Tokens.Common.Extensions;
 using Demo.Tokens.Common.Model;
-using Demo.Tokens.Web.AdminApi.Host.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Demo.Tokens.Web.AdminApi.Host.Controllers
+namespace Demo.Tokens.Api.Host.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
     [Authorize("ReadUserDetails")]
     public class UsersController : ControllerBase
     {
@@ -18,7 +17,7 @@ namespace Demo.Tokens.Web.AdminApi.Host.Controllers
             _logger = logger;
         }
 
-        [HttpGet(Name = "GetUsers")]
+        [HttpGet("api/users")]
         public IEnumerable<UserData> Get()
         {
             var currentUserId = User.GetUserId();

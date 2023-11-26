@@ -1,7 +1,7 @@
 using System.Reflection;
 using System.Text.Json;
 
-namespace Demo.Tokens.Web.AdminApi.Host.Model
+namespace Demo.Tokens.Api.Host.Model
 {
     public class TestUsers
     {
@@ -11,7 +11,7 @@ namespace Demo.Tokens.Web.AdminApi.Host.Model
             {
                 try
                 {
-                    string binDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+                    string binDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? "";
                     string dataFilePath = Path.Combine(binDirectory, "TestUsers.json");
                     string json = File.ReadAllText(dataFilePath);
                     var testUsers = JsonSerializer.Deserialize<List<AppUser>>(json);
