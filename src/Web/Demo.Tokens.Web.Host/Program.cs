@@ -9,6 +9,8 @@ namespace Demo.Tokens.Web.Host;
 
 public class Program
 {
+    public const string IdentityUrl = "https://localhost:5001";
+
     private static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
@@ -71,7 +73,7 @@ public class Program
             .AddCookie("Cookies")
             .AddOpenIdConnect("oidc", options =>
             {
-                options.Authority = "https://localhost:5001";
+                options.Authority = IdentityUrl;
 
                 switch (AuthenticationMode)
                 {

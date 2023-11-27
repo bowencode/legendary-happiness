@@ -95,7 +95,7 @@ namespace Demo.Tokens.Api.Host
                 options.AddPolicy(name: "ClientSideSPA",
                     policy =>
                     {
-                        policy.WithOrigins("https://localhost:3000");
+                        policy.WithOrigins("https://localhost:5173");
                         policy.WithHeaders(HeaderNames.Authorization);
                     });
             });

@@ -8,9 +8,9 @@ export default {
       loggedIn: false,
       userManager: new UserManager({
         authority: `https://localhost:5001`,
-        client_id: "spa",
+        client_id: "spa-user-ui",
         redirect_uri: `https://localhost:5173/signin-callback`,
-        scope: `openid profile scope1`,
+        scope: `openid profile api1`,
       }),
       accessToken: '',
       idToken: ''
@@ -52,7 +52,7 @@ export default {
   <header>
     <div class="header-container">
       <div class="header-left-container">
-        <div class="app-title">Sample Vue Client</div>
+        <div class="app-title">SPA Client</div>
       </div>
       <div class="header-right-container">
         <button v-if="loggedIn" @click="logout()" class="loginout-button">

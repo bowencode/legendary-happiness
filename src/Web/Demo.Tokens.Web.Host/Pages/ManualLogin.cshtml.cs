@@ -30,12 +30,12 @@ namespace Demo.Tokens.Web.Host.Pages
             var client = new HttpClient();
             var response = await client.RequestPasswordTokenAsync(new PasswordTokenRequest
             {
-                Address = "https://localhost:5001/connect/token",
+                Address = $"{Program.IdentityUrl}/connect/token",
                 ClientId = "password-login",
                 ClientSecret = "84c4d8ef-2fe6-4acc-8cf2-eb15b51fba0d",
                 UserName = Username,
                 Password = Password,
-                Scope = "openid profile offline_access api1 api2"
+                Scope = "openid profile offline_access api1"
             });
 
             if (response.IsError)
@@ -46,7 +46,7 @@ namespace Demo.Tokens.Web.Host.Pages
 
             var userInformation = await client.GetUserInfoAsync(new UserInfoRequest
             {
-                Address = "https://localhost:5001/connect/userinfo",
+                Address = $"{Program.IdentityUrl}/connect/userinfo",
                 Token = response.AccessToken
             });
             var claims = new List<Claim>();

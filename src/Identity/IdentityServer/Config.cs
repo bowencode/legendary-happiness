@@ -62,6 +62,29 @@ public static class Config
 
                 AllowedScopes = { "users", "api2" }
             },
+            
+            // interactive client for SPA client application
+            new Client
+            {
+                ClientId = "spa-user-ui",
+                AllowedGrantTypes = GrantTypes.Code,
+                RequireClientSecret = false,
+
+                RedirectUris =           { "https://localhost:5173/signin-callback" },
+                PostLogoutRedirectUris = { "https://localhost:5173" },
+                AllowedCorsOrigins =     { "https://localhost:5173" },
+
+                AlwaysIncludeUserClaimsInIdToken = true,
+
+                //IdentityProviderRestrictions = { "none" },
+
+                AllowedScopes =
+                {
+                    IdentityServerConstants.StandardScopes.OpenId,
+                    IdentityServerConstants.StandardScopes.Profile,
+                    "api1",
+                }
+            },
 
             // interactive client for server-side application
             new Client

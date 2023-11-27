@@ -1,14 +1,13 @@
 using Demo.Tokens.Api.Host.Model;
-using Demo.Tokens.Common.Configuration;
 using Demo.Tokens.Common.Model;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.Cosmos;
-using Microsoft.Extensions.Options;
 
 namespace Demo.Tokens.Api.Host.Controllers
 {
     [ApiController]
+    [EnableCors("ClientSideSPA")]
     public class MessagesController : ControllerBase
     {
         private readonly ILogger<MessagesController> _logger;
