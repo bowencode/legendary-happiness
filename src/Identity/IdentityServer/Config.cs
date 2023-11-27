@@ -1,5 +1,6 @@
 ﻿using Duende.IdentityServer;
 using Duende.IdentityServer.Models;
+using System.Runtime.CompilerServices;
 
 namespace IdentityServer;
 
@@ -18,12 +19,9 @@ public static class Config
     public static IEnumerable<ApiScope> ApiScopes =>
         new ApiScope[]
         {
-            new ApiScope("read:user-details"),
-            new ApiScope("read:username"),
-            new ApiScope("read:users"),
-            new ApiScope("read:notes"),
-            new ApiScope("write:notes"),
-            new ApiScope("list:notes"),
+            new ApiScope("api1"),
+            new ApiScope("api2"),
+            new ApiScope("users"),
         };
 
     public static IEnumerable<Client> Clients =>
@@ -38,7 +36,7 @@ public static class Config
                 AllowedGrantTypes = GrantTypes.ClientCredentials,
                 ClientSecrets = { new Secret("511536EF-F270-4058-80CA-1C89C192F69A".Sha256()) },
 
-                AllowedScopes = { "read:username" }
+                AllowedScopes = { "api1", "api2" }
             },
 
             // m2m client credentials client for server-side application to Admin API calls
@@ -50,7 +48,7 @@ public static class Config
                 AllowedGrantTypes = GrantTypes.ClientCredentials,
                 ClientSecrets = { new Secret("7954d1dd-49c0-4b9e-acd9-780c78a5570e".Sha256()) },
 
-                AllowedScopes = { "read:users" }
+                AllowedScopes = { "users" }
             },
 
             // m2m client credentials client for web client admin BFF to User API calls
@@ -62,7 +60,7 @@ public static class Config
                 AllowedGrantTypes = GrantTypes.ClientCredentials,
                 ClientSecrets = { new Secret("2e7a8484-8fdc-4458-9222-95f3b369421c".Sha256()) },
 
-                AllowedScopes = { "list:notes" }
+                AllowedScopes = { "users", "api2" }
             },
 
             // interactive client for server-side application
@@ -93,9 +91,9 @@ public static class Config
                     IdentityServerConstants.StandardScopes.OpenId,
                     IdentityServerConstants.StandardScopes.Profile,
                     IdentityServerConstants.StandardScopes.Email,
+                    "thirdParty",
                     IdentityServerConstants.StandardScopes.OfflineAccess,
-                    "read:notes",
-                    "write:notes",
+                    "api1",
                 }
             },
 
@@ -128,8 +126,7 @@ public static class Config
                     IdentityServerConstants.StandardScopes.OpenId,
                     IdentityServerConstants.StandardScopes.Profile,
                     IdentityServerConstants.StandardScopes.Email,
-                    "read:notes",
-                    "write:notes",
+                    "api1",
                 }
             },
 
@@ -148,8 +145,7 @@ public static class Config
                     IdentityServerConstants.StandardScopes.Profile,
                     IdentityServerConstants.StandardScopes.Email,
                     IdentityServerConstants.StandardScopes.OfflineAccess,
-                    "read:notes",
-                    "write:notes",
+                    "api1",
                 }
             },
 
@@ -181,8 +177,7 @@ public static class Config
                     IdentityServerConstants.StandardScopes.OpenId,
                     IdentityServerConstants.StandardScopes.Profile,
                     IdentityServerConstants.StandardScopes.Email,
-                    "read:notes",
-                    "write:notes",
+                    "api1",
                 }
             },
         };

@@ -35,7 +35,7 @@ namespace Demo.Tokens.Web.Host.Pages
                 ClientSecret = "84c4d8ef-2fe6-4acc-8cf2-eb15b51fba0d",
                 UserName = Username,
                 Password = Password,
-                Scope = "openid profile offline_access read:notes"
+                Scope = "openid profile offline_access api1 api2"
             });
 
             if (response.IsError)

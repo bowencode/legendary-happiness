@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
+using System.Text.Json.Serialization;
+using System.Text.Json;
 
 namespace Demo.Tokens.Api.Host
 {
@@ -46,14 +48,15 @@ namespace Demo.Tokens.Api.Host
             {
                 options.AddPolicy("ReceivedMessages", policy =>
                 {
-                    policy.RequireAuthenticatedUser();
+                    policy.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme);
                     policy.AddRequirements(new ScopeRequirement("api1"));
                 });
                 options.AddPolicy("SentMessages", policy =>
                 {
-                    //policy.RequireAuthenticatedUser();
-                    //policy.AddRequirements(new ScopeRequirement("api1"));
-                    policy.Requirements.Add(new UserRequirement("userId"));
+                    policy.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme);
+                    policy.AddRequirements(
+                        new ScopeRequirement("api1"),
+                        new UserRequirement("userId"));
                 });
                 options.AddPolicy("AllMessages", policy =>
                 {
@@ -66,7 +69,6 @@ namespace Demo.Tokens.Api.Host
                         }
                         return ctx.User.HasClaim(c => c.Type == "scope" && c.Value.Split(' ').Contains("api2"));
                     });
-                    policy.AddRequirements(new ScopeRequirement("list:notes"));
                 });
 
                 var scope = auth0Options.GetValue<string>("RequiredScope");
@@ -83,7 +85,6 @@ namespace Demo.Tokens.Api.Host
                 {
                     policy.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme);
                     policy.RequireClaim("idp", "aad");
-                    policy.AddRequirements(new ScopeRequirement("users"));
                 });
             });
 
@@ -99,7 +100,12 @@ namespace Demo.Tokens.Api.Host
                     });
             });
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers().AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                options.JsonSerializerOptions.WriteIndented = true;
+            });
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();

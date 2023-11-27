@@ -16,14 +16,14 @@ namespace Demo.Tokens.Web.Host.Pages
             if (token != null)
                 client.SetBearerToken(token);
 
-            var response = await client.GetAsync("https://localhost:7274/api/note");
+            var response = await client.GetAsync("https://localhost:7274/api/echo");
             if (!response.IsSuccessStatusCode)
             {
-                throw new Exception("Unable to retrieve calendar: " + response.StatusCode);
+                throw new Exception("Unable to call API: " + response.StatusCode);
             }
 
             var content = await response.Content.ReadAsStringAsync();
-            ViewData["Calendar"] = content;
+            ViewData["ApiResponse"] = content;
         }
     }
 }
