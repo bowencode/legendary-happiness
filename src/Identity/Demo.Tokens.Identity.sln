@@ -5,6 +5,11 @@ VisualStudioVersion = 17.3.32922.545
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityServer", "IdentityServer\IdentityServer.csproj", "{8D6680EF-62C2-4CF4-88EB-B9D5500CD82E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "External", "External", "{228D761D-7133-4A3F-87D6-029D1CC6B37A}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\ApiRequests.http = ..\..\ApiRequests.http
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
