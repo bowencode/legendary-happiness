@@ -11,6 +11,8 @@ public class Program
 {
     public const string IdentityUrl = "https://localhost:5001";
 
+    private const AuthClientType AuthenticationMode = AuthClientType.Implicit;
+
     private static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
@@ -58,8 +60,6 @@ public class Program
 
         app.Run();
     }
-
-    private static AuthClientType AuthenticationMode = AuthClientType.AuthCode;
 
     private static void ConfigureAuthentication(WebApplicationBuilder builder)
     {
@@ -120,7 +120,7 @@ public class Program
     private static void ConfigureImplicit(OpenIdConnectOptions options)
     {
         options.ClientId = "web-implicit-ui";
-        options.ResponseType = "token";
+        options.ResponseType = "token id_token";
 
         options.Scope.Add("profile");
         options.Scope.Add("email");

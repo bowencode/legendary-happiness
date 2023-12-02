@@ -400,3 +400,4 @@ FodyWeavers.xsd
 .cr/
 .vscode/
 **/IdentityServer/keys/*
+/src/MaliciousProxy/MaliciousProxy/captured.json

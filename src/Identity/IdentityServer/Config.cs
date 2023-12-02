@@ -127,6 +127,7 @@ public static class Config
                 AllowedGrantTypes = GrantTypes.Implicit,
                 RequireConsent = false,
                 RequireClientSecret = false,
+                AllowAccessTokensViaBrowser = true,
 
                 // where to redirect to after login
                 RedirectUris =
