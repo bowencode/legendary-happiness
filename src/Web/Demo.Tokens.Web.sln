@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32922.545
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.Tokens.Web.Host", "Demo.Tokens.Web.Host\Demo.Tokens.Web.Host.csproj", "{13392146-D118-4BEB-80E4-C2EC43995082}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{26EA7770-BD36-42FD-8165-1A389E7CCB04}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.Tokens.Common", "..\Common\Demo.Tokens.Common\Demo.Tokens.Common.csproj", "{1D77028F-C2C1-4BED-9BD9-736C1CA88A47}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{13392146-D118-4BEB-80E4-C2EC43995082}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{13392146-D118-4BEB-80E4-C2EC43995082}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{13392146-D118-4BEB-80E4-C2EC43995082}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{13392146-D118-4BEB-80E4-C2EC43995082}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1D77028F-C2C1-4BED-9BD9-736C1CA88A47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D77028F-C2C1-4BED-9BD9-736C1CA88A47}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D77028F-C2C1-4BED-9BD9-736C1CA88A47}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D77028F-C2C1-4BED-9BD9-736C1CA88A47}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{13392146-D118-4BEB-80E4-C2EC43995082} = {26EA7770-BD36-42FD-8165-1A389E7CCB04}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6DC3E359-1654-431F-9936-734AD0700537}
+	EndGlobalSection
+EndGlobal

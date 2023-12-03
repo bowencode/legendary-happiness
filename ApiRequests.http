@@ -1,0 +1,56 @@
+@authToken = eyJhbGciOiJSUzI1NiIsImtpZCI6IkIzQkJFMTFGN0QwRkE1REExMzcyQjQzRUZBQjlBQzY0IiwidHlwIjoiYXQrand0In0.eyJpc3MiOiJodHRwczovL2xvY2FsaG9zdDo1MDAxIiwibmJmIjoxNzAxMDQwMTkzLCJpYXQiOjE3MDEwNDAxOTMsImV4cCI6MTcwMTA0Mzc5MywiYXVkIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTAwMS9yZXNvdXJjZXMiLCJzY29wZSI6WyJvcGVuaWQiLCJwcm9maWxlIiwiZW1haWwiLCJyZWFkOm5vdGVzIiwid3JpdGU6bm90ZXMiLCJvZmZsaW5lX2FjY2VzcyJdLCJhbXIiOlsicHdkIl0sImNsaWVudF9pZCI6IndlYi11aSIsInN1YiI6IjIiLCJhdXRoX3RpbWUiOjE3MDEwNDAxOTIsImlkcCI6ImxvY2FsIiwic2lkIjoiQTc2QkYyNjdBRUY0QTIzODREOTZFMkQyREM0MTUxQTkiLCJqdGkiOiIwNzdFNEI4QjRDQTcwMjBFOEE0NTIxMDIxMDZGNTc5MSJ9.eXQVqw8Lv0O5Tjf1y1PtAUYPrF4mKqJybhrYPOr_vyTgcElp5Z4yO5OYin65vCe1ZlTjCnyXVbEJCL5BrmUZV3zOkiLzV_tpCel124r2S8PUOC2MxVsFidBRPu4X0E0RKYavkVO19uG-0vGE6SNXIPMXQPBbaw115Jms1pIOP3sC4G1F1Whc1NTEy-Y3jWA1VnMjJH6zmVKvpkRHNZTryrUf8KMObQZnORDsYpC9HeiUtuLrR_YvyGKavQCIVteUjr1qcZZ-85z2FaqZrpTcdLJTmOUCf6Gy--NYacVQBQuzRmAP3ZrrxzrbEXOFqhmVK5YBtU0FNZenFWxK6qpYhw
+@identity = https://localhost:5001
+@clientCredClientId = m2m.api
+@clientCredClientSecret = 511536EF-F270-4058-80CA-1C89C192F69A
+@clientCredScope = api1 api2
+
+###
+# @name clientCredResponse
+POST {{identity}}/connect/token
+Content-Type: application/x-www-form-urlencoded
+
+client_id={{clientCredClientId}}&client_secret={{clientCredClientSecret}}&grant_type=client_credentials&scope={{clientCredScope}}
+###
+@clientCredToken = {{clientCredResponse.response.body.access_token}}
+
+###
+# Get all messages
+GET https://localhost:7274/api/messages
+Authorization: Bearer {{clientCredToken}}
+
+
+
+###
+@passwordClientId = password-login
+@passwordClientSecret = 84c4d8ef-2fe6-4acc-8cf2-eb15b51fba0d
+@passwordScope = api1
+@passwordUsername = bob
+@passwordPassword = bob
+###
+# @name passwordResponse
+POST {{identity}}/connect/token
+Content-Type: application/x-www-form-urlencoded
+
+client_id={{passwordClientId}}&client_secret={{passwordClientSecret}}&grant_type=password&scope={{passwordScope}}&username={{passwordUsername}}&password={{passwordPassword}}
+###
+@passwordToken = {{passwordResponse.response.body.access_token}}
+
+###
+# Get received messages for bob
+GET https://localhost:7274/api/messages/2/to
+Authorization: Bearer {{passwordToken}}
+
+###
+# Get sent messages for bob
+GET https://localhost:7274/api/messages/2/from
+Authorization: Bearer {{passwordToken}}
+
+###
+# Get received messages for alice
+GET https://localhost:7274/api/messages/1/to
+Authorization: Bearer {{passwordToken}}
+
+###
+# Get sent messages for alice
+GET https://localhost:7274/api/messages/1/from
+Authorization: Bearer {{passwordToken}}

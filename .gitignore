@@ -396,3 +396,8 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+.cr/
+.vscode/
+**/IdentityServer/keys/*
+/src/MaliciousProxy/MaliciousProxy/captured.json
