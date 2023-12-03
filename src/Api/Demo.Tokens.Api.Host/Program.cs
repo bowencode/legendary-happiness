@@ -21,18 +21,20 @@ namespace Demo.Tokens.Api.Host
 
             var auth0Options = builder.Configuration.GetSection("Auth0");
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, opt =>
+                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
                 {
-                    opt.Authority = "https://localhost:5001";
-                    opt.Audience = "https://localhost:5001/resources";
-                    opt.MapInboundClaims = false;
-                    opt.RequireHttpsMetadata = true;
-                    opt.SaveToken = true;
-                    opt.TokenValidationParameters = new TokenValidationParameters
+                    options.Authority = "https://localhost:5001";
+                    options.Audience = "https://localhost:5001/resources";
+                    options.MapInboundClaims = false;
+                    options.RequireHttpsMetadata = true;
+                    options.SaveToken = true;
+                    options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuer = true,
                         RequireAudience = true,
                     };
+
+                    options.ForwardDefaultSelector = SchemeSelector.ForwardReferenceToken("reference");
                 })
                 .AddJwtBearer("Auth0Bearer", options =>
                 {
@@ -40,6 +42,12 @@ namespace Demo.Tokens.Api.Host
                     var audience = auth0Options.GetValue<string>("Audience");
                     options.Authority = authority;
                     options.Audience = audience;
+                })
+                .AddOAuth2Introspection("reference", options =>
+                {
+                    options.Authority = "https://localhost:5001";
+                    options.ClientId = "api-introspection";
+                    options.ClientSecret = "98337efc-8193-45dc-ad3d-4cbdf7501f30";
                 });
 
             builder.Services.AddSingleton<IAuthorizationHandler, ScopeAuthorizationHandler>();

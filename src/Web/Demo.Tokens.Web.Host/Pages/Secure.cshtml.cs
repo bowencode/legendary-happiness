@@ -19,7 +19,7 @@ namespace Demo.Tokens.Web.Host.Pages
             var response = await client.GetAsync("https://localhost:7274/api/echo");
             if (!response.IsSuccessStatusCode)
             {
-                throw new Exception("Unable to call API: " + response.StatusCode);
+                ViewData["ApiResponse"] = "Unable to call API: " + response.StatusCode;
             }
 
             var content = await response.Content.ReadAsStringAsync();

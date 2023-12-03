@@ -11,7 +11,7 @@ public class Program
 {
     public const string IdentityUrl = "https://localhost:5001";
 
-    private const AuthClientType AuthenticationMode = AuthClientType.Implicit;
+    private const AuthClientType AuthenticationMode = AuthClientType.AuthCode;
 
     private static void Main(string[] args)
     {

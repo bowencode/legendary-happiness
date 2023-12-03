@@ -16,6 +16,16 @@ public static class Config
             new IdentityResource("thirdParty", new []{ "externalAccessToken" })
         };
 
+    public static IEnumerable<ApiResource> ApiResources =>
+        new ApiResource[]
+        {
+            new ApiResource("api-introspection", "Demo API")
+            {
+                ApiSecrets = { new Secret("98337efc-8193-45dc-ad3d-4cbdf7501f30".Sha256()) },
+                Scopes = { "api1", "api2" }
+            },
+        };
+
     public static IEnumerable<ApiScope> ApiScopes =>
         new ApiScope[]
         {
