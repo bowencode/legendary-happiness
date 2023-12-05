@@ -1,12 +1,9 @@
-using Demo.Tokens.Common.Configuration;
 using Demo.Tokens.Common.Extensions;
-using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
 using System.Text.Json.Serialization;
-using System.Text.Json;
 
 namespace Demo.Tokens.Api.Host
 {
@@ -17,8 +14,6 @@ namespace Demo.Tokens.Api.Host
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            AddAuthenticatedApiAccess(builder.Services, builder.Configuration);
-
             var auth0Options = builder.Configuration.GetSection("Auth0");
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
@@ -96,8 +91,6 @@ namespace Demo.Tokens.Api.Host
                 });
             });
 
-            builder.Services.Configure<CosmosOptions>(builder.Configuration.GetSection("Cosmos"));
-
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy(name: "ClientSideSPA",
@@ -137,27 +130,6 @@ namespace Demo.Tokens.Api.Host
             app.MapControllers();
 
             app.Run();
-        }
-
-        private static void AddAuthenticatedApiAccess(IServiceCollection services, IConfiguration configuration)
-        {
-            var apiOptions = configuration.GetSection("AdminApi").Get<AdminApiOptions>();
-
-            services.AddAccessTokenManagement(options =>
-            {
-                options.Client.Clients.Add("tokenService", new ClientCredentialsTokenRequest
-                {
-                    Address = $"{apiOptions.Identity.Authority.TrimEnd('/')}/connect/token",
-                    ClientId = apiOptions.Identity.ClientId,
-                    ClientSecret = apiOptions.Identity.ClientSecret,
-                    Scope = string.Join(" ", apiOptions.Identity.Scopes),
-                });
-            });
-
-            services.AddClientAccessTokenHttpClient("adminApiClient", "tokenService", configureClient: client =>
-            {
-                client.BaseAddress = new Uri(apiOptions.Host);
-            });
         }
     }
 }
