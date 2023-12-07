@@ -20,6 +20,7 @@ namespace Demo.Tokens.Web.Host.Pages
             if (!response.IsSuccessStatusCode)
             {
                 ViewData["ApiResponse"] = "Unable to call API: " + response.StatusCode;
+                return;
             }
 
             var content = await response.Content.ReadAsStringAsync();

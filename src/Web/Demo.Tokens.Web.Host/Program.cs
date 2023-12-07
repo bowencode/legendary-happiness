@@ -1,9 +1,5 @@
 using System.IdentityModel.Tokens.Jwt;
-using System.Net.Http.Headers;
-using Demo.Tokens.Common.Configuration;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.Extensions.Options;
 
 namespace Demo.Tokens.Web.Host;
 
@@ -11,7 +7,7 @@ public class Program
 {
     public const string IdentityUrl = "https://localhost:5001";
 
-    private const AuthClientType AuthenticationMode = AuthClientType.AuthCode;
+    public const AuthClientType AuthenticationMode = AuthClientType.AuthCode;
 
     private static void Main(string[] args)
     {
